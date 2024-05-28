@@ -1,0 +1,22 @@
+Uvod
+====
+
+Vsechny skripty predpokladaji umisteni ciloveho programu ve slozce
+								/home/debian/Repozitare/PY009_Mennekes
+
+py009_mennekes.service
+====================================
+
+Skript sluzby pro Beaglebone. Program mennekes se bude automaticky spoustet
+po startu.
+
+**POSTUP:**
+
+1. skript nahrajte do umisteni 
+								/etc/systemd/system
+2. nactete sluzby
+								sudo systemct daemon-reload
+3. sluzbu povolte
+								sudo systemctl enable py009_mennekes.service
+4. sluzbu spustte
+								sudo systemctl start py009_mennekes.service
