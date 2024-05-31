@@ -2,7 +2,7 @@ from pymodbus.client import ModbusSerialClient
 
 class Device:
     def __init__(self):
-        pass
+        self.__client = ModbusSerialClient(port="")
 
     def connect(self, method, port, baudrate, bytesize, parity, stopbits):
 
