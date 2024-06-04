@@ -19,6 +19,7 @@ device_parity = DeviceCommunacationGUI(root, "Parity", ["None", "Even", "Odd"], 
 device_stopbits = DeviceCommunacationGUI(root, "Stopbits", ["1", "2"], True, False)
 
 test0 = ParametersGUI(root, "Group", "Physical address", "Logical address", "Value", "Name", "Description", "Note")
+device_values_gui = DeviceValuesGUI(root)
 
 device_method.grid(0, 0)
 device_port.grid(1, 0)
@@ -28,8 +29,7 @@ device_parity.grid(4, 0)
 device_stopbits.grid(5, 0)
 
 test0.grid(0, 4)
-for i in range(len(device_values.data)):
-    device_values_gui.append(DeviceValuesGUI(root, device_values.data_group[i], device_values.data_physical_address[i], device_values.data_logical_address[i], device_values.data_value[i], device_values.data_name[i], device_values.data_description[i], device_values.data_note[i]))
-    device_values_gui[i].grid(i + 1, 4)
+device_values_gui.add(device_values.data_group, device_values.data_physical_address, device_values.data_logical_address, device_values.data_value, device_values.data_name, device_values.data_description, device_values.data_note)
+device_values_gui.grid(1, 4)
 
 root.mainloop()
