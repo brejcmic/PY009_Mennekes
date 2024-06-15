@@ -8,21 +8,21 @@ class MyConnectionLine():
         self.custom = custom
         self.refresh = refresh
         
-        self.label_description = tk.CTkLabel(master, text=self.description, width=75)
+        self.label_description = tk.CTkLabel(master, text=self.description, width=75, height=40)
         
-        self.optionmenu_parameter = tk.CTkOptionMenu(master, values=self.parameter, width=150)
+        self.optionmenu_parameter = tk.CTkOptionMenu(master, values=self.parameter, width=150, height=40)
         self.optionmenu_parameter.set(self.parameter[0])
         
         if self.custom:
-            self.entry_custom = tk.CTkEntry(master, width=150)
-            self.switch_custom = tk.CTkSwitch(master, text="", width=30, command=self.toggle_switch_custom)
+            self.entry_custom = tk.CTkEntry(master, width=150, height=40)
+            self.switch_custom = tk.CTkSwitch(master, text="", width=50, height=40, command=self.toggle_switch_custom)
             
         if self.refresh:
-            self.button_refresh = tk.CTkButton(master, text="Refresh", width=50)
+            self.button_refresh = tk.CTkButton(master, text="Refresh", width=50, height=40)
         
         print(self.description + " MyConnectionLine created")
         
-    def draw_line(self, row):
+    def draw_line(self, row) -> None:
         
         self.row = row
         
@@ -35,7 +35,7 @@ class MyConnectionLine():
             
         print(self.description + " MyConnectionLine drawn")
         
-    def toggle_switch_custom(self):
+    def toggle_switch_custom(self) -> None:
         if self.switch_custom.get():
             self.entry_custom.grid(row=self.row, column=1, sticky="w")
             self.optionmenu_parameter.grid_forget()
@@ -46,20 +46,20 @@ class MyConnectionLine():
         print(self.description + " MyConnectionLine switched")
 
 class MyConnectionFrame(tk.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         super().__init__(master)
         
         self.method = MyConnectionLine(self, "Method", ["RTU", "ASCII", "Binary"], custom=True, refresh=False)
         self.port = MyConnectionLine(self, "Port", ["COM1", "COM2", "COM3"], custom=True, refresh=True)
         self.baudrate = MyConnectionLine(self, "Baudrate", ["9600", "19200", "38400"], custom=True, refresh=False)
-        self.databits = MyConnectionLine(self, "Databits", ["7", "8"], custom=False, refresh=False)
-        self.parity = MyConnectionLine(self, "Parity", ["None", "Even", "Odd"], custom=False, refresh=False)
-        self.stopbits = MyConnectionLine(self, "Stopbits", ["1", "2"], custom=False, refresh=False)
+        self.databits = MyConnectionLine(self, "Databits", ["7", "8"], custom=True, refresh=False)
+        self.parity = MyConnectionLine(self, "Parity", ["None", "Even", "Odd"], custom=True, refresh=False)
+        self.stopbits = MyConnectionLine(self, "Stopbits", ["1", "2"], custom=True, refresh=False)
         
         print("MyConnectionFrame created")
         
-    def draw_frame(self, row):
-        self.grid(row=row, column=0, sticky="w")
+    def draw_frame(self, row, column) -> None:
+        self.grid(row=row, column=column, sticky="w")
         
         self.method.draw_line(row)
         self.port.draw_line(row+1)
