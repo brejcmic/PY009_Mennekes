@@ -1,5 +1,5 @@
 import tkinter as tk
-from gui import DeviceCommunacationGUI, DeviceValuesGUI, ParametersGUI
+from gui import DeviceCommunicationGUI, DeviceValuesGUI, ParametersGUI
 from device import DeviceValues
 
 device_values = DeviceValues()
@@ -11,12 +11,12 @@ device_values_gui = []
 root = tk.Tk()
 root.title("Pymodbus GUI")
 
-device_method = DeviceCommunacationGUI(root, "Method", ["RTU", "ASCII", "Binary"], True, False)
-device_port = DeviceCommunacationGUI(root, "Port", ["Port1", "Port2"], True, True)
-device_baudrate = DeviceCommunacationGUI(root, "Baudrate", ["115100", "9600"], True, False)
-device_bytesize = DeviceCommunacationGUI(root, "Bytesize", ["8", "7"], True, False)
-device_parity = DeviceCommunacationGUI(root, "Parity", ["None", "Even", "Odd"], True, False)
-device_stopbits = DeviceCommunacationGUI(root, "Stopbits", ["1", "2"], True, False)
+device_method = DeviceCommunicationGUI(root, "Method", ["RTU", "ASCII", "Binary"], True, False)
+device_port = DeviceCommunicationGUI(root, "Port", ["Port1", "Port2"], True, True)
+device_baudrate = DeviceCommunicationGUI(root, "Baudrate", ["115100", "9600"], True, False)
+device_bytesize = DeviceCommunicationGUI(root, "Bytesize", ["8", "7"], True, False)
+device_parity = DeviceCommunicationGUI(root, "Parity", ["None", "Even", "Odd"], True, False)
+device_stopbits = DeviceCommunicationGUI(root, "Stopbits", ["1", "2"], True, False)
 
 test0 = ParametersGUI(root, "Group", "Physical address", "Logical address", "Value", "Name", "Description", "Note")
 device_values_gui = DeviceValuesGUI(root)

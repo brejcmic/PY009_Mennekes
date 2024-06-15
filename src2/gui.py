@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class DeviceCommunacationGUI:
+class DeviceCommunicationGUI:
     # Class for the device communication GUI
     def __init__(self, root: tk.Tk, description: str, parameters: list, custom: bool, refresh: bool) -> None:
         self.root = root
