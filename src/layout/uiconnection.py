@@ -50,9 +50,9 @@ class MyConnectionFrame(tk.CTkFrame):
         super().__init__(master)
         
         self.method = MyConnectionLine(self, "Method", ["RTU", "ASCII", "Binary"], custom=True, refresh=False)
-        self.port = MyConnectionLine(self, "Port", ["COM1", "COM2", "COM3"], custom=True, refresh=True)
+        self.port = MyConnectionLine(self, "Port", ["None"], custom=True, refresh=True)
         self.baudrate = MyConnectionLine(self, "Baudrate", ["9600", "19200", "38400"], custom=True, refresh=False)
-        self.databits = MyConnectionLine(self, "Databits", ["7", "8"], custom=True, refresh=False)
+        self.databits = MyConnectionLine(self, "Databits", ["8"], custom=True, refresh=False)
         self.parity = MyConnectionLine(self, "Parity", ["None", "Even", "Odd"], custom=True, refresh=False)
         self.stopbits = MyConnectionLine(self, "Stopbits", ["1", "2"], custom=True, refresh=False)
         
