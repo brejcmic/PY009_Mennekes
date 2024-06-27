@@ -1,4 +1,5 @@
 import customtkinter as tk
+from content.ports import update_ports
 
 class MyConnectionLine():
     def __init__(self, master, description: str, parameter: list, custom: bool, refresh: bool) -> None:
@@ -44,6 +45,11 @@ class MyConnectionLine():
             self.entry_custom.grid_forget()
             
         print(self.description + " MyConnectionLine switched")
+        
+    def refresh_pressed(self) -> None:
+        update_ports(self.optionmenu_parameter)
+        
+        print(self.description + " MyConnectionLine refreshed")
 
 class MyConnectionFrame(tk.CTkFrame):
     def __init__(self, master) -> None:
@@ -51,10 +57,12 @@ class MyConnectionFrame(tk.CTkFrame):
         
         self.method = MyConnectionLine(self, "Method", ["RTU", "ASCII", "Binary"], custom=True, refresh=False)
         self.port = MyConnectionLine(self, "Port", ["None"], custom=True, refresh=True)
-        self.baudrate = MyConnectionLine(self, "Baudrate", ["9600", "19200", "38400"], custom=True, refresh=False)
+        self.baudrate = MyConnectionLine(self, "Baudrate", ["9600", "19200", "38400", "115200"], custom=True, refresh=False)
         self.databits = MyConnectionLine(self, "Databits", ["8"], custom=True, refresh=False)
         self.parity = MyConnectionLine(self, "Parity", ["None", "Even", "Odd"], custom=True, refresh=False)
         self.stopbits = MyConnectionLine(self, "Stopbits", ["1", "2"], custom=True, refresh=False)
+        
+        self.port.button_refresh.configure(command=self.port.refresh_pressed)
         
         print("MyConnectionFrame created")
         

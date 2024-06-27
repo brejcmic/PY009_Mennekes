@@ -1,14 +1,13 @@
 import serial.tools.list_ports as lp
 
-def find() -> list:
+def update_ports(option_menu) -> None:
     inputs = lp.comports()
     usb = []
     
     for input in inputs:
         if input.device.startswith("/dev/cu.usbserial"):
-            usb.append(input.device.split(" ")[0])
+            usb.append(input.device.replace("/dev/cu.usbserial-", ""))
             
-    if usb:
-        return usb  
-    else:
-        return
+    option_menu.configure(values=usb)
+    
+    print("Ports updated")
