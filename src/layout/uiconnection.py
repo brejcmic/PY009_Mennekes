@@ -6,12 +6,13 @@ class MyConnectionLine():
         
         self.description = description
         self.parameter = parameter
+        self.selected_parameter = tk.StringVar()
         self.custom = custom
         self.refresh = refresh
         
         self.label_description = tk.CTkLabel(master, text=self.description, width=75, height=40)
         
-        self.optionmenu_parameter = tk.CTkOptionMenu(master, values=self.parameter, width=150, height=40)
+        self.optionmenu_parameter = tk.CTkOptionMenu(master, variable=self.selected_parameter, values=self.parameter, width=150, height=40)
         self.optionmenu_parameter.set(self.parameter[0])
         
         if self.custom:
@@ -59,7 +60,7 @@ class MyConnectionFrame(tk.CTkFrame):
         self.port = MyConnectionLine(self, "Port", ["None"], custom=True, refresh=True)
         self.baudrate = MyConnectionLine(self, "Baudrate", ["9600", "19200", "38400", "115200"], custom=True, refresh=False)
         self.databits = MyConnectionLine(self, "Databits", ["8"], custom=True, refresh=False)
-        self.parity = MyConnectionLine(self, "Parity", ["None", "Even", "Odd"], custom=True, refresh=False)
+        self.parity = MyConnectionLine(self, "Parity", ["N", "E", "O"], custom=True, refresh=False)
         self.stopbits = MyConnectionLine(self, "Stopbits", ["1", "2"], custom=True, refresh=False)
         
         self.port.button_refresh.configure(command=self.port.refresh_pressed)
@@ -77,3 +78,16 @@ class MyConnectionFrame(tk.CTkFrame):
         self.stopbits.draw_line(row+5)
         
         print("MyConnectionFrame drawn")
+        
+    def get_parameters(self) -> dict:
+        parameters = {}
+        parameters["method"] = self.method.selected_parameter.get()
+        parameters["port"] = self.port.selected_parameter.get()
+        parameters["baudrate"] = self.baudrate.selected_parameter.get()
+        parameters["bytesize"] = self.databits.selected_parameter.get()
+        parameters["parity"] = self.parity.selected_parameter.get()
+        parameters["stopbits"] = self.stopbits.selected_parameter.get()
+        
+        print("MyConnectionFrame parameters got")
+        
+        return parameters

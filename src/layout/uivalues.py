@@ -42,23 +42,48 @@ class MyValuesLine:
         self.entry_note.grid(row=self.row, column=6, sticky="w")
         
         print(self.group + " MyValuesLine drawn")
-    
+        
+    def update(self, value) -> None:
+        self.value = value
+        
+        if self.group == "Coil" or self.group == "Holding register":
+            self.entry_value.configure(placeholder_text=self.value)
+        else:
+            self.label_value.configure(text=self.value)
+            
+        print("MyValuesScrollableFrame updated")
+        
+    def get(self) -> dict:
+        values = {
+            "group": self.group,
+            "physical_address": self.physical_address,
+            "logical_address": self.logical_address,
+            "value": self.value,
+            "name": self.entry_name.get(),
+            "description": self.entry_description.get(),
+            "note": self.entry_note.get()
+        }
+        
+        if self.group == "Coil" or self.group == "Holding register":
+            values["value"] = self.entry_value.get()
+        
+        return values
 class MyValuesScrollableFrame(tk.CTkScrollableFrame):
-    def __init__(self, master, values, **kwargs) -> None:
+    def __init__(self, master, data, **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.values = values
+        self.data = data
         self.lines = []
         
-        for i in range(len(self.values.group)):
+        for i in range(len(self.data["group"])):
             line = MyValuesLine(
                 self,
-                self.values.group[i],
-                self.values.physical_address[i],
-                self.values.logical_address[i],
-                self.values.value[i],
-                self.values.name[i],
-                self.values.description[i],
-                self.values.note[i]
+                self.data["group"][i],
+                self.data["physical_address"][i],
+                self.data["logical_address"][i],
+                self.data["value"][i],
+                self.data["name"][i],
+                self.data["description"][i],
+                self.data["note"][i]
             )
             
             self.lines.append(line)
@@ -70,3 +95,17 @@ class MyValuesScrollableFrame(tk.CTkScrollableFrame):
             self.lines[i].draw_line(i)
         
         print("MyValuesScrollableFrame created")
+        
+    def update_values(self, values) -> None:
+        for i in range(len(values)):
+            self.lines[i].update(value=values[i])
+            
+        print("MyValuesScrollableFrame updated")
+        
+    def get_values(self) -> dict:
+        values = []
+        
+        for i in range(len(self.lines)):
+            values.append(self.lines[i].get())
+        
+        return values
