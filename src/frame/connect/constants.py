@@ -1,0 +1,14 @@
+ITEMS_HEIGHT = 40
+
+DESCRIPTION_WIDTH = 75
+OPTIONS_WIDTH = 150
+CUSTOM_ENTRY_WIDTH = 150
+CUSTOM_SWITCH_WIDTH = 50
+REFRESH_WIDTH = 50
+
+METHOD_PARAMETERS = 'Method', ['RTU', 'ASCII', 'Binary'], True, False
+PORT_PARAMETERS = 'Port', ['NaN'], True, True
+BAUDRATE_PARAMETERS = 'Baudrate', ['9600', '19200', '38400', '57600', '115200'], True, False
+DATABITS_PARAMETERS = 'Databits', ['7', '8'], True, False
+PARITY_PARAMETERS = 'Parity', ['N', 'E', 'O'], True, False
+STOPBITS_PARAMETERS = 'Stopbits', ['1', '2'], True, False
