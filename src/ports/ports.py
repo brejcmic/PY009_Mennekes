@@ -10,5 +10,5 @@ class Ports:
         self.available_ports = []
         
         for input in inputs:
-            if input.device.startswith(c.PREFIX_PORT_MACOS):
+            if input.device.startswith(c.PREFIX_PORT_MACOS) or input.device.startswith(c.PREFIX_PORT_LINUX) or input.device.startswith(c.PREFIX_PORT_WINDOWS):
                 self.available_ports.append(input.device)
