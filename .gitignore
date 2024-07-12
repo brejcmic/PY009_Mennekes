@@ -1,50 +1,29 @@
-# ------------------------------------------------------------------------------
-# Omezeni pripon souboru pro verzovani projektu
-# ------------------------------------------------------------------------------
-# vse globalne zakazano:
-*.*
+# Ignore virtual environment directory
+.venv/
 
-# ------------------------------------------------------------------------------
-# Zakazane adresare
-# ------------------------------------------------------------------------------
-venv/
-test/
+# Ignore macOS system files
+.DS_Store
 
-# ------------------------------------------------------------------------------
-# Povolene adresare
-# ------------------------------------------------------------------------------
-!doc/**
-!doc/*.*
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
 
-# ------------------------------------------------------------------------------
-# Povolene soubory
-# ------------------------------------------------------------------------------
-# gitingnore list
-!*.gitignore
-!*.gitattributes
+# Ignore environment variable files
+.env
 
-# zdrojove soubory
-!*.py
-!*.service
-!*.sh
-!*.html
-!*.htm
-!*.js
-!*.bat
+# Ignore logs
+logs/
+*.log
 
-# dokumentace
-!*.md
-!*.txt
-!*.pdf
-!*.doc
-!*.docx
-!*.xls
-!*.xlsx
-!*.rtf
-!*.json
+# Ignore compiled files
+*.o
+*.so
 
-# ------------------------------------------------------------------------------
-# Zakazane soubory
-# ------------------------------------------------------------------------------
-# soubor postmortu programu
-postmort*.*
+# Ignore node_modules (if using Node.js)
+node_modules/
+
+# Ignore IDE/editor config files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

@@ -1,0 +1,163 @@
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import QThread, pyqtSignal
+
+from window.window import Window
+from device.device import Device
+from ports.ports import Ports
+from data.data import Data
+
+import sys
+
+class WorkerThread(QThread):
+    finished = pyqtSignal(int)
+
+    def __init__(self, target=None, args=(), kwargs={}, *, daemon=None):
+        super().__init__()
+        self._target = target
+        self._args = args
+        self._kwargs = kwargs
+        self._daemon = daemon
+
+    def run(self):
+        result = self._target(*self._args, **self._kwargs)
+        self.finished.emit(result)
+        
+    def set_function(self, target, args=(), kwargs={}):
+        self._target = target
+        self._args = args
+        self._kwargs = kwargs
+
+def main() -> None:
+    app  = QApplication(sys.argv)
+    
+    window = Window()
+    device = Device()
+    ports = Ports()
+    data = Data()
+    
+    calc_thread = WorkerThread()
+    
+    def port_refresh() -> None:
+        window.commgroup.update_state("Searching for ports...", "orange")
+        
+        def refresh_ports():
+            ports.find_ports()
+            window.grabber["port_option"].clear()
+            window.grabber["port_option"].addItems(ports.available_ports)
+            
+        calc_thread.set_function(refresh_ports)
+        calc_thread.finished.connect(lambda: window.commgroup.update_state("Ports refreshed", "green"))
+        calc_thread.start()
+            
+    def connect() -> None:
+        window.commgroup.update_state("Connecting...", "orange")
+        
+        def connect_thread():
+            if not device.is_connected:
+                data = window.commgroup.get()
+                device.connect(
+                    method=str(data["method"]),
+                    port=str(data["port"]),
+                    baudrate=int(data["baudrate"]),
+                    bytesize=int(data["bytesize"]),
+                    parity=str(data["parity"]),
+                    stopbits=int(data["stopbits"])
+                )
+        
+        def connect_update_state():
+            if device.is_connected:
+                window.commgroup.update_state("Connected", "green")
+            else: 
+                window.commgroup.update_state("Disconnected", "red")
+                
+        calc_thread.set_function(connect_thread)
+        calc_thread.finished.connect(connect_update_state)
+        calc_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
+        calc_thread.start()
+        
+    def disconnect() -> None:
+        window.commgroup.update_state("Disconnecting...", "orange")
+        
+        if device.is_connected:
+            device.disconnect()
+            
+        window.commgroup.update_state("Disconnected", "red")
+        
+    def read() -> None:
+        window.commgroup.update_state("Reading...", "orange")
+        
+        def read_thread():
+            if device.is_connected:
+                device.read()
+                
+        calc_thread.set_function(read_thread)
+        calc_thread.finished.connect(lambda: window.valuesgroup.update(device.data, True))
+        calc_thread.finished.connect(lambda: window.commgroup.update_state("Read", "green"))
+        calc_thread.start()
+        
+        
+    def readInInterval(checked) -> None:
+        if not device.is_connected:
+            return None
+        
+        if checked:
+            window.grabber["readInInterval_timer"].start()
+            window.grabber["readInInterval_timer"].setInterval(int(window.grabber["readInInterval_edit"].text()))
+            window.grabber["readInInterval_timer"].timeout.connect(read)
+        else:
+            window.grabber["readInInterval_timer"].stop()
+            window.grabber["readInInterval_timer"].timeout.disconnect(read)
+        return None
+    
+    def write() -> None:
+        window.commgroup.update_state("Writing...", "orange")
+        
+        def write_thread():
+            if device.is_connected:
+                temp = window.valuesgroup.get()
+                device.write(temp)
+
+        calc_thread.set_function(write_thread)
+        calc_thread.finished.connect(lambda: read())
+        calc_thread.finished.connect(lambda: window.commgroup.update_state("Write", "green"))
+        calc_thread.start()
+        
+    def save() -> None:
+        window.commgroup.update_state("Saving...", "orange")
+        
+        temp = window.valuesgroup.get()
+        data.save(temp, window)
+        
+        window.commgroup.update_state("Saved", "green")
+        
+    def saveas() -> None:
+        window.commgroup.update_state("Saving as...", "orange")
+        
+        temp = window.valuesgroup.get()
+        data.saveas(temp, window)
+        
+        window.commgroup.update_state("Saved as", "green")
+        
+    def open() -> None:
+        window.commgroup.update_state("Opening...", "orange")
+        
+        data.open(window)
+        window.valuesgroup.update(data.data, False)
+        
+        window.commgroup.update_state("Opened", "green")
+    
+    window.grabber["port_refresh"].clicked.connect(port_refresh)
+    window.grabber["connect"].triggered.connect(connect)
+    window.grabber["disconnect"].triggered.connect(disconnect)
+    window.grabber["read"].triggered.connect(read)
+    window.grabber["readInInterval_action"].toggled.connect(readInInterval)
+    window.grabber["write"].triggered.connect(write)
+    window.grabber["save"].triggered.connect(save)
+    window.grabber["saveas"].triggered.connect(saveas)
+    window.grabber["open"].triggered.connect(open)
+    
+    window.show()
+    app.exec()
+
+if __name__ == '__main__':
+    main()
